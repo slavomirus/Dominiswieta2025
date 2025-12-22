@@ -159,7 +159,7 @@
         // ==========================================
 
         (function() {
-            if (PUBLIC_KEY !== "gNWlagHJ8cjoVNoBp") {
+            if (PUBLIC_KEY !== "TU_WKLEJ_PUBLIC_KEY") {
                 emailjs.init(PUBLIC_KEY);
             }
         })();
@@ -167,7 +167,7 @@
         function sendEmail() {
             const btn = document.getElementById('sendBtn');
             
-            if (PUBLIC_KEY === "TU_WPISZ_PUBLIC_KEY") {
+            if (PUBLIC_KEY === "TU_WKLEJ_PUBLIC_KEY") {
                 alert("BŁĄD: Nie uzupełniłeś kluczy EmailJS w pliku index.html!");
                 return;
             }
