@@ -167,7 +167,7 @@
         function sendEmail() {
             const btn = document.getElementById('sendBtn');
             
-            if (PUBLIC_KEY === "gNWlagHJ8cjoVNoBp") {
+            if (PUBLIC_KEY !== "gNWlagHJ8cjoVNoBp") {
                 alert("BŁĄD: Nie uzupełniłeś kluczy EmailJS w pliku index.html!");
                 return;
             }
