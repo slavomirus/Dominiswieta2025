@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wesołych Świąt!</title>
+    
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .container {
+            padding: 2rem;
+            max-width: 800px;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 3rem;
+            color: #d4af37; /* Gold color */
+            text-transform: uppercase;
+            line-height: 1.4;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1.5rem 4rem;
+            font-size: 1.2rem;
+            color: #1a1a1a;
+            background-color: #d4af37;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            animation: slideUp 2s ease-in-out;
+        }
+
+        .btn:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .btn:disabled {
+            background-color: #555;
+            color: #888;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Snow effect */
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: #fff;
+            font-size: 1em;
+            font-family: Arial, sans-serif;
+            text-shadow: 0 0 5px #000;
+            user-select: none;
+            z-index: 0;
+            animation-name: snowflakes-fall, snowflakes-shake;
+            animation-duration: 10s, 3s;
+            animation-timing-function: linear, ease-in-out;
+            animation-iteration-count: infinite, infinite;
+            animation-play-state: running, running;
+        }
+
+        @keyframes snowflakes-fall {
+            0% { top: -10%; }
+            100% { top: 100%; }
+        }
+
+        @keyframes snowflakes-shake {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(80px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Generating snowflakes */
+        .snowflake:nth-of-type(0) { left: 1%; animation-delay: 0s, 0s; }
+        .snowflake:nth-of-type(1) { left: 10%; animation-delay: 1s, 1s; }
+        .snowflake:nth-of-type(2) { left: 20%; animation-delay: 6s, .5s; }
+        .snowflake:nth-of-type(3) { left: 30%; animation-delay: 4s, 2s; }
+        .snowflake:nth-of-type(4) { left: 40%; animation-delay: 2s, 2s; }
+        .snowflake:nth-of-type(5) { left: 50%; animation-delay: 8s, 3s; }
+        .snowflake:nth-of-type(6) { left: 60%; animation-delay: 6s, 2s; }
+        .snowflake:nth-of-type(7) { left: 70%; animation-delay: 2.5s, 1s; }
+        .snowflake:nth-of-type(8) { left: 80%; animation-delay: 1s, 0s; }
+        .snowflake:nth-of-type(9) { left: 90%; animation-delay: 3s, 1.5s; }
+        .snowflake:nth-of-type(10) { left: 25%; animation-delay: 2s, 0s; }
+        .snowflake:nth-of-type(11) { left: 65%; animation-delay: 4s, 2.5s; }
+    </style>
+</head>
+<body>
+
+    <!-- Snowflakes -->
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+
+    <div class="container">
+        <h1>Brawo wygrałaś bilety na<br>Taco Tour 2026!!!</h1>
+        <button id="sendBtn" class="btn" onclick="sendEmail()">ODBIERZ</button>
+    </div>
+
+    <script>
+        // KONFIGURACJA EMAILJS - UZUPEŁNIJ TE DANE
+        const PUBLIC_KEY = "TU_WKLEJ_PUBLIC_KEY"; 
+        const SERVICE_ID = "TU_WKLEJ_SERVICE_ID"; 
+        const TEMPLATE_ID = "TU_WKLEJ_TEMPLATE_ID"; 
+
+        (function() {
+            emailjs.init(PUBLIC_KEY);
+        })();
+
+        async function sendEmail() {
+            const btn = document.getElementById('sendBtn');
+            btn.innerHTML = "PRZYGOTOWYWANIE PREZENTU...";
+            btn.disabled = true;
+
+            try {
+                // 1. Pobieramy plik z serwera (musi być w tym samym folderze na GitHubie)
+                const fileName = "Twoje bilety na Taco Hemingway 💛.eml";
+                // Kodujemy nazwę pliku, bo zawiera spacje i emoji
+                const fileUrl = encodeURIComponent(fileName);
+                
+                const response = await fetch(fileUrl);
+                if (!response.ok) throw new Error("Nie udało się pobrać biletu.");
+                const blob = await response.blob();
+
+                // 2. Konwertujemy plik na Base64
+                const reader = new FileReader();
+                reader.readAsDataURL(blob);
+                
+                reader.onloadend = function() {
+                    const base64data = reader.result; // To zawiera dane pliku
+
+                    // 3. Wysyłamy maila z załącznikiem
+                    // Uwaga: W szablonie EmailJS musisz obsłużyć parametr 'content' jako załącznik
+                    // lub po prostu liczyć na to, że EmailJS to przetworzy.
+                    
+                    const templateParams = {
+                        to_name: "Domi",
+                        content: base64data,  // Treść pliku
+                        file_name: fileName   // Nazwa pliku
+                    };
+
+                    btn.innerHTML = "WYSYŁANIE...";
+
+                    emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
+                        .then(function(response) {
+                            console.log('SUCCESS!', response.status, response.text);
+                            btn.innerHTML = "WYSŁANO! SPRAWDŹ SKRZYNKĘ";
+                            alert("Ho Ho Ho! Prezent został wysłany na maila!");
+                        }, function(error) {
+                            console.log('FAILED...', error);
+                            btn.innerHTML = "BŁĄD WYSYŁANIA";
+                            btn.disabled = false;
+                            alert("Błąd wysyłania maila. Sprawdź konsolę (F12).");
+                        });
+                };
+
+            } catch (error) {
+                console.error(error);
+                btn.innerHTML = "BŁĄD POBIERANIA";
+                btn.disabled = false;
+                alert("Nie udało się znaleźć biletu na serwerze. Upewnij się, że plik .eml jest wgrany na GitHuba.");
+            }
+        }
+    </script>
+</body>
+</html>
