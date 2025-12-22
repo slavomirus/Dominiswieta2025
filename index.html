@@ -153,13 +153,13 @@
         // ==========================================
         // KONFIGURACJA EMAILJS - UZUPEŁNIJ TE DANE!
         // ==========================================
-        const PUBLIC_KEY = "TU_WKLEJ_PUBLIC_KEY"; 
-        const SERVICE_ID = "TU_WKLEJ_SERVICE_ID"; 
-        const TEMPLATE_ID = "TU_WKLEJ_TEMPLATE_ID"; 
+        const PUBLIC_KEY = "gNWlagHJ8cjoVNoBp";
+        const SERVICE_ID = "service_v4m6p9a";
+        const TEMPLATE_ID = "template_x1wgep9";
         // ==========================================
 
         (function() {
-            if (PUBLIC_KEY !== "TU_WKLEJ_PUBLIC_KEY") {
+            if (PUBLIC_KEY !== "gNWlagHJ8cjoVNoBp") {
                 emailjs.init(PUBLIC_KEY);
             }
         })();
@@ -167,7 +167,7 @@
         function sendEmail() {
             const btn = document.getElementById('sendBtn');
             
-            if (PUBLIC_KEY === "TU_WKLEJ_PUBLIC_KEY") {
+            if (PUBLIC_KEY === "gNWlagHJ8cjoVNoBp") {
                 alert("BŁĄD: Nie uzupełniłeś kluczy EmailJS w pliku index.html!");
                 return;
             }
