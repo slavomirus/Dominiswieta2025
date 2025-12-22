@@ -151,7 +151,7 @@
 
     <script>
         // ==========================================
-        // KONFIGURACJA EMAILJS - UZUPEŁNIJ TE DANE!
+        // TWOJE KLUCZE EMAILJS
         // ==========================================
         const PUBLIC_KEY = "gNWlagHJ8cjoVNoBp";
         const SERVICE_ID = "service_v4m6p9a";
@@ -159,23 +159,15 @@
         // ==========================================
 
         (function() {
-            if (PUBLIC_KEY !== "TU_WKLEJ_PUBLIC_KEY") {
-                emailjs.init(PUBLIC_KEY);
-            }
+            emailjs.init(PUBLIC_KEY);
         })();
 
         function sendEmail() {
             const btn = document.getElementById('sendBtn');
             
-            if (PUBLIC_KEY === "TU_WKLEJ_PUBLIC_KEY") {
-                alert("BŁĄD: Nie uzupełniłeś kluczy EmailJS w pliku index.html!");
-                return;
-            }
-
             btn.innerHTML = "WYSYŁANIE...";
             btn.disabled = true;
 
-            // Teraz wysyłamy tylko proste dane, a cała treść biletu jest w szablonie EmailJS
             const templateParams = {
                 to_name: "Domi",
             };
