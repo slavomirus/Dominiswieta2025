@@ -150,45 +150,55 @@
     </div>
 
     <script>
-        // KONFIGURACJA EMAILJS - UZUPEŁNIJ TE DANE
-        const PUBLIC_KEY = "TU_WKLEJ_PUBLIC_KEY"; 
-        const SERVICE_ID = "TU_WKLEJ_SERVICE_ID"; 
-        const TEMPLATE_ID = "TU_WKLEJ_TEMPLATE_ID"; 
+        // ==========================================
+        // KONFIGURACJA EMAILJS - UZUPEŁNIJ TE DANE!
+        // ==========================================
+        const PUBLIC_KEY = "gNWlagHJ8cjoVNoBp";
+        const SERVICE_ID = "service_v4m6p9a";
+        const TEMPLATE_ID = "template_x1wgep9s";
+        // ==========================================
 
         (function() {
-            emailjs.init(PUBLIC_KEY);
+            if (PUBLIC_KEY !== "gNWlagHJ8cjoVNoBp") {
+                emailjs.init(PUBLIC_KEY);
+            }
         })();
 
         async function sendEmail() {
             const btn = document.getElementById('sendBtn');
-            btn.innerHTML = "PRZYGOTOWYWANIE PREZENTU...";
+            
+            // Sprawdzenie czy klucze zostały uzupełnione
+            if (PUBLIC_KEY === "gNWlagHJ8cjoVNoBp" || SERVICE_ID === "service_v4m6p9a") {
+                alert("BŁĄD KONFIGURACJI: Nie uzupełniłeś kluczy EmailJS w pliku index.html!");
+                return;
+            }
+
+            btn.innerHTML = "PRZYGOTOWYWANIE...";
             btn.disabled = true;
 
-            try {
-                // 1. Pobieramy plik z serwera (musi być w tym samym folderze na GitHubie)
-                const fileName = "Twoje bilety na Taco Hemingway 💛.eml";
-                // Kodujemy nazwę pliku, bo zawiera spacje i emoji
-                const fileUrl = encodeURIComponent(fileName);
-                
-                const response = await fetch(fileUrl);
-                if (!response.ok) throw new Error("Nie udało się pobrać biletu.");
-                const blob = await response.blob();
+            const fileName = "Twoje bilety na Taco Hemingway 💛.eml";
+            // Generujemy link do pliku (zakładając, że strona jest na GitHub Pages)
+            // Pobieramy obecny adres URL i zamieniamy index.html na nazwę pliku
+            const currentUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/'));
+            const fileLink = `${currentUrl}/${encodeURIComponent(fileName)}`;
 
-                // 2. Konwertujemy plik na Base64
+            try {
+                // Próba 1: Pobranie pliku i wysłanie jako dane (może być za duży dla EmailJS)
+                const response = await fetch(encodeURIComponent(fileName));
+                if (!response.ok) throw new Error("Nie znaleziono pliku lokalnie.");
+                const blob = await response.blob();
+                
                 const reader = new FileReader();
                 reader.readAsDataURL(blob);
                 
                 reader.onloadend = function() {
-                    const base64data = reader.result; // To zawiera dane pliku
+                    const base64data = reader.result;
 
-                    // 3. Wysyłamy maila z załącznikiem
-                    // Uwaga: W szablonie EmailJS musisz obsłużyć parametr 'content' jako załącznik
-                    // lub po prostu liczyć na to, że EmailJS to przetworzy.
-                    
                     const templateParams = {
                         to_name: "Domi",
-                        content: base64data,  // Treść pliku
-                        file_name: fileName   // Nazwa pliku
+                        content: base64data, // Próba wysłania treści
+                        file_link: fileLink, // Link zapasowy
+                        file_name: fileName
                     };
 
                     btn.innerHTML = "WYSYŁANIE...";
@@ -196,13 +206,31 @@
                     emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
                         .then(function(response) {
                             console.log('SUCCESS!', response.status, response.text);
-                            btn.innerHTML = "WYSŁANO! SPRAWDŹ SKRZYNKĘ";
+                            btn.innerHTML = "WYSŁANO! 🎁";
                             alert("Ho Ho Ho! Prezent został wysłany na maila!");
-                        }, function(error) {
-                            console.log('FAILED...', error);
-                            btn.innerHTML = "BŁĄD WYSYŁANIA";
-                            btn.disabled = false;
-                            alert("Błąd wysyłania maila. Sprawdź konsolę (F12).");
+                        })
+                        .catch(function(error) {
+                            console.error('FAILED with attachment...', error);
+                            
+                            // Próba 2: Jeśli wysłanie z załącznikiem się nie uda, wysyłamy sam link
+                            console.log("Próbuję wysłać sam link...");
+                            const fallbackParams = {
+                                to_name: "Domi",
+                                content: "Bilet jest zbyt duży, aby go załączyć. Pobierz go tutaj: " + fileLink,
+                                file_link: fileLink,
+                                file_name: fileName
+                            };
+                            
+                            emailjs.send(SERVICE_ID, TEMPLATE_ID, fallbackParams)
+                                .then(function(res) {
+                                    btn.innerHTML = "WYSŁANO (LINK)! 🎁";
+                                    alert("Wysłano maila z linkiem do biletu!");
+                                })
+                                .catch(function(err) {
+                                    btn.innerHTML = "BŁĄD WYSYŁANIA";
+                                    btn.disabled = false;
+                                    alert("Błąd EmailJS: " + JSON.stringify(err));
+                                });
                         });
                 };
 
@@ -210,7 +238,7 @@
                 console.error(error);
                 btn.innerHTML = "BŁĄD POBIERANIA";
                 btn.disabled = false;
-                alert("Nie udało się znaleźć biletu na serwerze. Upewnij się, że plik .eml jest wgrany na GitHuba.");
+                alert("Nie udało się pobrać biletu z serwera. Upewnij się, że plik jest na GitHubie.");
             }
         }
     </script>
