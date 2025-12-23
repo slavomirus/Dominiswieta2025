@@ -21,7 +21,7 @@ def generate_qr(url, output_file="site_qr.png"):
 if __name__ == "__main__":
     # Domyślny link - użytkownik powinien go zmienić na swój link do GitHub Pages
     # np. https://twojanazwa.github.io/nazwa-repozytorium/
-    target_url = "https://example.com" 
+    target_url = "https://slavomirus.github.io/Dominiswieta2025"
     
     if len(sys.argv) > 1:
         target_url = sys.argv[1]
